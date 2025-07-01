@@ -1,8 +1,8 @@
 import express, { Router } from "express"
 import {body , validationResult} from "express-validator"
 import rateLimit from "express-rate-limit"
-import { User } from "../models/user.models"
-import { protect } from "../middleware/auth"
+import { User } from "../models/user.models.js"
+import { protect } from "../middleware/auth.js"
 
 const router = Router()
 
@@ -273,4 +273,5 @@ router.post('/logout' , protect , (req,res) => {
 })
 
 
-export default router;
+export default router
+

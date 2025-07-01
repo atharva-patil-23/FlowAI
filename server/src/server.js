@@ -5,6 +5,10 @@ import helment from "helmet"
 import morgan from "morgan"
 import compression from "compression";
 import rateLimit from "express-rate-limit"
+import router from './routes/auth.js';
+import projectRouter from "./routes/projects.js";
+import taskRouter from "./routes/tasks.js";
+import userRouter from "./routes/users.js";
 
 import dotenv from "dotenv"
 
@@ -44,10 +48,10 @@ app.get('/api/health' , (req,res) => {
 })
 
 //Auth routes remaining 
-app.use('/api/auth', authRoutes );
-app.use('/api/users', userRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/tasks', taskRoutes);
+app.use('/api/auth', router );
+app.use('/api/users', userRouter);
+app.use('/api/projects', projectRouter);
+app.use('/api/tasks', taskRouter);
 
 app.use((err,req, res , next) => {
     console.log(err.stack)
