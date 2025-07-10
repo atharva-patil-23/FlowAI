@@ -1,74 +1,33 @@
-import mongoose from "mongoose";
-import express from "express";
+import express from "express"
+import mongoose from "mongoose"
 import cors from "cors"
-import helment from "helmet"
-import morgan from "morgan"
-import compression from "compression";
-import rateLimit from "express-rate-limit"
-import router from './routes/auth.js';
-import projectRouter from "./routes/projects.js";
-import taskRouter from "./routes/tasks.js";
-import userRouter from "./routes/users.js";
-
 import dotenv from "dotenv"
+import { createServer } from "http"
+import { Server } from "socket.io"
+import { json } from "stream/consumers"
 
-dotenv.config()
 
 const app = express()
+const server = createServer(app)
+const io = new Server(server,{
+    cors:{
+        origin:"http://localhost:5173",
+        methods:['GET','POST']
+    }
+});
 
-app.use(helment())
 
-const limiter = rateLimit({
-    windowMs : 15*60*1000,
-    max:100
-})
+app.use(cors());
+app.use(express.json())
 
-app.use('/api/',limiter)
-
-app.use(express.json({limit:'10mb'}))
-app.use(express.urlencoded({extended:true}))
-
-if(process.env.NODE_ENV === "development"){
-    app.use(morgan('dev'))
-}
-
-app.use(compression())
-
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => console.log("MongoDB connected successfully"))
-.catch((err) => console.log("MongoDB connection error",err))
-
-app.get('/api/health' , (req,res) => {
-    res.json({
-        status:"OK",
-        message:"FlowAi server is running",
-        timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV
+app.get('/' , (req,res) => {
+    res.status(200).json({
+        message:"AI task manager API"
     })
 })
 
-//Auth routes remaining 
-app.use('/api/auth', router );
-app.use('/api/users', userRouter);
-app.use('/api/projects', projectRouter);
-app.use('/api/tasks', taskRouter);
+const PORT = process.env.PORT || 5000;
 
-app.use((err,req, res , next) => {
-    console.log(err.stack)
-    res.status(500).json({
-        message:'something went wrong!',
-        error:process.env.NODE_ENV === 'development' ? err.message: {}
-    })
+server.listen(PORT, () => {
+    console.log(`server is running on port ${PORT}`)
 })
-
-app.use('*', (req, res) => {
-    res.status(404).json({ message: 'Route not found' });
-  });
-
-
-const PORT = process.env.PORT || 5050
-
-app.listen(process.env.PORT,() => {
-    console.log(`Server is running on port ${PORT}`)
-    console.log(`Environment ${process.env.NODE_ENV}`)
-} )
