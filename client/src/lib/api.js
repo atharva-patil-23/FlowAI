@@ -10,18 +10,26 @@ class ApiError extends Error {
     }
 }
 
+const NETWORK_ERROR_MESSAGE = "Cannot reach the server. Check your connection and try again.";
+
 export const api = async (path, { method = "GET", body, headers = {}, signal } = {}) => {
     const token = useAuthStore.getState().token;
-    const res = await fetch(`${BASE}${path}`, {
-        method,
-        headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            ...headers,
-        },
-        body: body ? JSON.stringify(body) : undefined,
-        signal,
-    });
+    let res;
+    try {
+        res = await fetch(`${BASE}${path}`, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                ...headers,
+            },
+            body: body ? JSON.stringify(body) : undefined,
+            signal,
+        });
+    } catch (err) {
+        if (err?.name === "AbortError") throw err;
+        throw new ApiError(NETWORK_ERROR_MESSAGE, 0);
+    }
 
     let payload = null;
     try {
@@ -41,15 +49,21 @@ export const api = async (path, { method = "GET", body, headers = {}, signal } =
 
 export const apiStream = async (path, { body, signal } = {}) => {
     const token = useAuthStore.getState().token;
-    const res = await fetch(`${BASE}${path}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: body ? JSON.stringify(body) : undefined,
-        signal,
-    });
+    let res;
+    try {
+        res = await fetch(`${BASE}${path}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: body ? JSON.stringify(body) : undefined,
+            signal,
+        });
+    } catch (err) {
+        if (err?.name === "AbortError") throw err;
+        throw new ApiError(NETWORK_ERROR_MESSAGE, 0);
+    }
     if (!res.ok || !res.body) {
         throw new ApiError(`Stream failed (${res.status})`, res.status);
     }
