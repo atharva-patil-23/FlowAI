@@ -34,7 +34,15 @@ const initialsOf = (person) => {
     return (person.username || person.email || "?").slice(0, 2).toUpperCase();
 };
 
-const TaskCard = ({ task, canEdit, onEdit, onDelete, onStatusChange, updatePending }) => {
+const TaskCard = ({
+    task,
+    canEdit,
+    canChangeStatus,
+    onEdit,
+    onDelete,
+    onStatusChange,
+    updatePending,
+}) => {
     const due = formatDueDate(task.dueDate);
     const pillClass = PRIORITY_PILL[task.priority] || PRIORITY_PILL.Medium;
 
@@ -112,7 +120,7 @@ const TaskCard = ({ task, canEdit, onEdit, onDelete, onStatusChange, updatePendi
                 )}
             </div>
 
-            {canEdit && (
+            {canChangeStatus && (
                 <select
                     value={task.status}
                     onChange={(e) => onStatusChange(task, e.target.value)}
@@ -128,11 +136,19 @@ const TaskCard = ({ task, canEdit, onEdit, onDelete, onStatusChange, updatePendi
     );
 };
 
-const TasksSection = ({ project, canEdit }) => {
+const TasksSection = ({ project, canEdit, currentUserId }) => {
     const projectId = project._id || project.id;
     const { data: tasks = [], isLoading, isError, error } = useTasks(projectId);
     const updateMutation = useUpdateTask(projectId);
     const deleteMutation = useDeleteTask(projectId);
+
+    const isAssignee = (task) => {
+        if (!currentUserId) return false;
+        const a = task.assignedTo;
+        if (!a) return false;
+        const aid = a._id || a.id || a;
+        return String(aid) === String(currentUserId);
+    };
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [aiDialogOpen, setAiDialogOpen] = useState(false);
@@ -220,6 +236,7 @@ const TasksSection = ({ project, canEdit }) => {
                                         key={task._id || task.id}
                                         task={task}
                                         canEdit={canEdit}
+                                        canChangeStatus={canEdit || isAssignee(task)}
                                         onEdit={openEdit}
                                         onDelete={handleDelete}
                                         onStatusChange={handleStatusChange}

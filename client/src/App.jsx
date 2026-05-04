@@ -6,6 +6,8 @@ import NotFound from "./pages/NotFound.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import DashboardHome from "./components/dashboard/DashboardHome.jsx";
 import ProjectDetail from "./pages/ProjectDetail.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
+import SettingsPage from "./pages/SettingsPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
                 >
                     <Route index element={<DashboardHome />} />
                     <Route path="projects/:projectId" element={<ProjectDetail />} />
+                    <Route path="profile" element={<ProfilePage />} />
+                    <Route path="settings" element={<SettingsPage />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>

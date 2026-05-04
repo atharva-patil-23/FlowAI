@@ -338,7 +338,7 @@ const ProjectDetail = () => {
 
             <MembersCard project={project} isOwner={isOwner} />
 
-            <TasksSection project={project} canEdit={canEdit} />
+            <TasksSection project={project} canEdit={canEdit} currentUserId={currentUserId} />
         </div>
     );
 };

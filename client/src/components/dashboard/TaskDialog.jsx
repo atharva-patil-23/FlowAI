@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -124,6 +125,9 @@ const TaskDialog = ({ open, onOpenChange, projectId, project, task }) => {
             <DialogContent className="max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>{isEdit ? "Edit task" : "New task"}</DialogTitle>
+                    <DialogDescription>
+                        {isEdit ? "Update the task details below." : "Add a task to this project."}
+                    </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
@@ -158,7 +162,7 @@ const TaskDialog = ({ open, onOpenChange, projectId, project, task }) => {
                                 {...register("status")}
                                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                             >
-                                <option value="Todo">Todo</option>
+                                <option value="Todo">To do</option>
                                 <option value="Inprogress">In progress</option>
                                 <option value="Completed">Completed</option>
                             </select>

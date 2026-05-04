@@ -5,7 +5,12 @@ export const signupSchema = z
         username: z.string().trim().min(3, "Username must be at least 3 characters").max(50),
         firstName: z.string().trim().min(1, "First name is required").max(50),
         lastName: z.string().trim().min(1, "Last name is required").max(50),
-        email: z.string().trim().toLowerCase().email("Invalid email"),
+        email: z
+            .string()
+            .trim()
+            .toLowerCase()
+            .min(1, "Email is required")
+            .email("Invalid email"),
         password: z.string().min(6, "Password must be at least 6 characters").max(128),
         confirmPassword: z.string().min(1, "Confirm your password"),
     })
@@ -15,6 +20,11 @@ export const signupSchema = z
     });
 
 export const loginSchema = z.object({
-    email: z.string().trim().toLowerCase().email("Invalid email"),
+    email: z
+        .string()
+        .trim()
+        .toLowerCase()
+        .min(1, "Email is required")
+        .email("Invalid email"),
     password: z.string().min(1, "Password is required"),
 });

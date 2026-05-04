@@ -12,3 +12,12 @@ export const loginSchema = z.object({
     email: z.string().trim().toLowerCase().email(),
     password: z.string().min(1),
 });
+
+export const updatePreferencesSchema = z
+    .object({
+        aiSuggestion: z.boolean().optional(),
+        notifications: z.boolean().optional(),
+    })
+    .refine((v) => Object.keys(v).length > 0, {
+        message: "At least one preference is required",
+    });

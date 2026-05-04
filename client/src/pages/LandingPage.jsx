@@ -101,7 +101,7 @@ const LandingPage = () => {
                         href="#features"
                         className="text-[14.5px] text-white/85 hover:text-white px-6 py-3 glass rounded-full w-full sm:w-auto text-center"
                     >
-                        Watch the demo
+                        See features
                     </a>
                 </div>
             </section>

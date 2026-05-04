@@ -62,3 +62,17 @@ export const me = asyncHandler(async (req, res) => {
     }
     res.json({ success: true, data: { user: user.toClient() } });
 });
+
+export const updatePreferences = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+        return res
+            .status(404)
+            .json({ success: false, error: { message: "User not found" } });
+    }
+    const { aiSuggestion, notifications } = req.body;
+    if (typeof aiSuggestion === "boolean") user.preferences.aiSuggestion = aiSuggestion;
+    if (typeof notifications === "boolean") user.preferences.notifications = notifications;
+    await user.save();
+    res.json({ success: true, data: { user: user.toClient() } });
+});

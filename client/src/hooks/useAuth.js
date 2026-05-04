@@ -43,3 +43,16 @@ export const useLogout = () => {
         qc.clear();
     };
 };
+
+export const useUpdatePreferences = () => {
+    const setUser = useAuthStore((s) => s.setUser);
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (values) =>
+            api("/auth/me/preferences", { method: "PATCH", body: values }),
+        onSuccess: ({ user }) => {
+            setUser(user);
+            qc.setQueryData(["me"], user);
+        },
+    });
+};

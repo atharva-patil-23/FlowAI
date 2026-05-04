@@ -1,4 +1,5 @@
-import { Search, Bell, Plus, Menu, User, Settings, LogOut } from "lucide-react";
+import { Plus, Menu, User, Settings, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -16,6 +17,7 @@ import { useLogout } from "@/hooks/useAuth";
 const TopNavigation = ({ onToggleSidebar, onNewTask }) => {
     const user = useAuthStore((s) => s.user);
     const logout = useLogout();
+    const navigate = useNavigate();
     const initials =
         (user?.firstName?.[0] || "") + (user?.lastName?.[0] || "") ||
         user?.email?.[0]?.toUpperCase() ||
@@ -31,14 +33,6 @@ const TopNavigation = ({ onToggleSidebar, onNewTask }) => {
                 >
                     <Menu className="h-5 w-5" />
                 </button>
-
-                <div className="relative">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/45" />
-                    <input
-                        placeholder="Search tasks..."
-                        className="glass-row w-64 rounded-xl py-2 pl-9 pr-3 text-[13px] text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-red-500/40"
-                    />
-                </div>
             </div>
 
             <div className="flex items-center gap-2">
@@ -51,13 +45,6 @@ const TopNavigation = ({ onToggleSidebar, onNewTask }) => {
                         <span className="hidden sm:inline">New task</span>
                     </button>
                 )}
-
-                <button
-                    aria-label="Notifications"
-                    className="h-9 w-9 rounded-lg flex items-center justify-center text-white/75 hover:text-white hover:bg-white/10"
-                >
-                    <Bell className="h-5 w-5" />
-                </button>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -88,11 +75,11 @@ const TopNavigation = ({ onToggleSidebar, onNewTask }) => {
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate("/dashboard/profile")}>
                             <User className="h-4 w-4" />
                             Profile
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate("/dashboard/settings")}>
                             <Settings className="h-4 w-4" />
                             Settings
                         </DropdownMenuItem>
