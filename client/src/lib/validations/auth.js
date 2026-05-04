@@ -7,7 +7,7 @@ export const signupSchema = z
         lastName: z.string().trim().min(1, "Last name is required").max(50),
         email: z.string().trim().toLowerCase().email("Invalid email"),
         password: z.string().min(6, "Password must be at least 6 characters").max(128),
-        confirmPassword: z.string(),
+        confirmPassword: z.string().min(1, "Confirm your password"),
     })
     .refine((d) => d.password === d.confirmPassword, {
         path: ["confirmPassword"],
