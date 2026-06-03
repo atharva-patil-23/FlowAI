@@ -40,7 +40,6 @@ const AIGenerateTasksDialog = ({ open, onOpenChange, projectId }) => {
             setAddError(null);
             setAdding(false);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
 
     const onGenerate = () => {

@@ -4,6 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "node server.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "server": "nodemon server.js"

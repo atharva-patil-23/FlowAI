@@ -11,8 +11,8 @@ const nullableObjectId = z
 
 const nullableDate = z
     .union([z.string().datetime({ offset: true }), z.string().length(0), z.null()])
-    .optional()
-    .transform((v) => (v ? new Date(v) : null));
+    .transform((v) => (v ? new Date(v) : null))
+    .optional();
 
 export const createTaskSchema = z.object({
     title: z.string().trim().min(1, "Title is required").max(200),
