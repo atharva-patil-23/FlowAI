@@ -195,9 +195,11 @@ reason about than an explicit effect).
 - Render the aurora at `0.3` scale and blur it up with a CSS `filter` — cheap, and blur hides
   the low resolution entirely.
 - One `requestAnimationFrame` loop, four ribbons, 40 segments each.
-- **Pause the loop when the canvas is offscreen or the tab is hidden.** The aurora is fixed to
-  the viewport, so it must stop when the user scrolls past the fold — otherwise it burns
-  battery for the whole page.
+- **Pause the loop when the tab is hidden**, and only then. An earlier draft of this spec also
+  called for pausing once the user scrolled past the fold; that was wrong. The canvas is
+  `position: fixed` and every section below it is translucent, so the aurora is genuinely
+  visible for the full length of the page — stopping it on scroll would visibly freeze the
+  ribbons mid-motion. A hidden tab is the only moment nobody is looking.
 - Skip pointer drift on coarse pointers.
 - Never mount the canvas at all under `prefers-reduced-motion`.
 
